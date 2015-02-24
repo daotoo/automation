@@ -89,7 +89,16 @@ class Suite(unittest.TestCase):
         self.pg.disable_enable_player('test@iastate.edu')
         self.pg.is_element_displayed('notificationinner')
 
-    def test_ZZZ_cleanup(self):
+    def test_edit_player(self):
+        self.pg.login(self.email, self.password)
+        self.pg.wait_until_element_exist(10, 'nav_coaching_tools')
+        self.pg.nav_to_manage_roster()
+        self.pg.edit_player(email='test@iastate.edu', first_name='Zachary',
+                            last_name='Tester', jersey_number='15',
+                            grad_year=JUNIOR,
+                            email_address='edit_email@hudl.com')
+
+    def test_Z_cleanup(self):
         self.pg.login(self.email, self.password)
         self.pg.wait_until_element_exist(10, 'nav_coaching_tools')
         self.pg.nav_to_manage_roster()

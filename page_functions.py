@@ -65,7 +65,7 @@ class PageFunctions(object):
         Adds a player to the roster with the given arguments
         :param firstname: First name of player
         :param lastname: Last name of player
-        @param opts:    *jeresy_number: Player Jersey Number
+        @param kwargs:  *jeresy_number: Player Jersey Number
                         *grad_year: Year of the player is graduating
                         *positions: Player positions
                         *email_address: Player's email address
@@ -160,12 +160,76 @@ class PageFunctions(object):
         :param element: Element to check
         :return: bool
         """
-
         return self.driver.find_element_by_id(element).is_enabled()
 
+    def edit_player(self, email=None, **kwargs):
+        """
+        Edit a players information
+        :param email: The email address of the player to edit
+         @param kwargs:
+                        *first_name: First name of player
+                        *last_name: Last name of player
+                        *jeresy_number: Player Jersey Number
+                        *grad_year: Year of the player is graduating
+                        *positions: Player positions
+                        *email_address: Player's email address
+        """
+        first_name = kwargs.get('first_name')
+        last_name = kwargs.get('last_name')
+        jersey_number = kwargs.get('jersey_number')
+        grad_year = kwargs.get('grad_year')
+        positions = kwargs.get('positions')
+        email_address = kwargs.get('email_address')
 
+        self.select_player(email)
+        self.driver.find_element_by_class_name('edit_player_link').click()
+        self.wait_until_element_exist(10, 'edit_player')
 
+        if first_name:
+            box = self.driver.find_element_by_id('edit_first_name')
+            box.clear()
+            box.send_keys(first_name)
 
+        if last_name:
+            box = self.driver.find_element_by_id('edit_last_name')
+            box.clear()
+            box.send_keys(last_name)
+
+        if jersey_number:
+            box = self.driver.find_element_by_id('edit_jersey')
+            box.clear()
+            box.send_keys(jersey_number)
+
+        if email_address:
+            box = self.driver.find_element_by_id('edit_email')
+            box.clear()
+            box.send_keys(email_address)
+
+        if grad_year:
+            class_picker = Select(self.driver.find_element_by_id('edit_class'))
+            class_picker.select_by_visible_text(grad_year)
+
+        #Could not get posisiton to work quite right
+
+        # if positions:
+        #     text_posistions = []
+        #     self.driver.find_element_by_id('edit_position').click()
+        #     self.wait_until_element_exist(10, 'posMenu')
+        #     checkboxes = self.driver.find_element_by_id('posMenu')\
+        #         .find_elements_by_tag_name('li')
+        #
+        #     for box in checkboxes:
+        #         text_posistions.append(box.text)
+        #
+        #     for text in text_posistions:
+        #         pos_to_check = self.driver.find_element_by_id('pos_' + text)
+        #         if pos_to_check.is_selected():
+        #             pos_to_check.click()
+
+        #     for posistion in positions:
+        #        self.driver.find_element_by_id('pos_' + posistion).click()
+
+        self.driver.find_element_by_id('edit_save_changes').click()
 
 
 
